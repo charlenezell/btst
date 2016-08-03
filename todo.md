@@ -1,0 +1,1 @@
+1. how to devDepend for global module
