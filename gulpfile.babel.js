@@ -19,7 +19,7 @@ export function script() {
       debug: true
     })
     .transform(babelify,{
-      compact: "auto"
+      compact: "true"
     });
   return b.bundle()
     // .on('error', function(err) {
@@ -40,7 +40,7 @@ export function script() {
 
 export function watch() {
   // livereload.listen();
-  gulp.watch(["./core/**/*.es6", "./plugins/**/*.es6", "./main.es6", "./test/**/*.*"], script);
+  gulp.watch(["./core/**/*.es6", "./plugins/**/*.es6", "./main.es6", "./test/**/*.*","./lib/**/*.js"], script);
 }
 
 const build = gulp.series(script, watch);

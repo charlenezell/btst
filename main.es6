@@ -3,7 +3,8 @@ let core=require("./core/core.es6");
 let util=require("./core/util.es6");
 module.exports= {
     tool:require("./core/tools.es6"),
-    core,util
+    core,
+    util
     // $:require("./core/core.es6").$,
     // event:require("./core/core.es6").event
 };
