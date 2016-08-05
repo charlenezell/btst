@@ -1,7 +1,7 @@
 /// <reference path="../typings/index.d.ts" />
 let UA = require('ua-device');
 let uaInfo = new UA(navigator.userAgent);
-let util= require("../core/util.es6");
+let util = require("../core/util.es6");
 // let uaInfo = new UA("Mozilla/5.0 (Linux; Android 6.0.1; SM-G9300 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile MQQBrowser/6.2 TBS/036555 Safari/537.36 MicroMessenger/6.3.22.821 NetType/WIFI Language/zh_CN");
 let st = require("../core/core.es6").st;
 
@@ -55,7 +55,7 @@ CollectBrowserInfo.prototype.collectBrowserInfo = function() {
         os: uaInfo.os.name,
         platform: navigator.platform,
         browser: uaInfo.browser.name,
-        cookieSupport:util.cookies.enabled,
+        cookieSupport: util.cookies.enabled,
         // browserVersion: uaInfo.browser.version.original,
         deviceManufacturer: uaInfo.device.manufacturer,
         deviceModel: uaInfo.device.model,
@@ -67,7 +67,7 @@ CollectBrowserInfo.prototype.collectBrowserInfo = function() {
         screenHeight: screen.height,
         aScreenWidth: screen.availWidth,
         aScreenHeight: screen.availHeight,
-        userAgent:navigator.userAgent
+        userAgent: navigator.userAgent
     }
 }
 
