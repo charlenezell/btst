@@ -28,13 +28,13 @@
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-cli": "github:gulpjs/gulp-cli",
     "gulp-uglify": "^1.5.4",
+    "gulp-util": "^3.0.7",
     "lite-server": "^2.2.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "cookies-js": "^1.2.2",
-    "node-uuid": "^1.4.7",
+    "extend": "^3.0.0",
     "wolfy87-eventemitter": "^5.1.0"
   }
 }

@@ -1,11 +1,10 @@
-/// <reference path="../typings/index.d.ts" />
-var util = require("./util.es6");
-var event = require("./event.es6");
-var $ = require("./selector.es6");
+// var util = require("./util.es6");
+// var event = require("./event.es6");
+// var $ = require("./selector.es6");
 
-function env() {
+// function env() {
 
-}
+// }
 
 function register(config) {
     // console.log(config);
@@ -31,9 +30,4 @@ let st = {
     sendInfomation
 };
 
-module.exports = {
-    util,
-    st,
-    event,
-    $
-};
+module.exports = st;

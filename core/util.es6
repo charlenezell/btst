@@ -1,100 +1,127 @@
-/// <reference path="../typings/index.d.ts" />
-let uuid = require('node-uuid');
-const class2type = {};
+let uuid = require("../lib/uuid.es6");
+let class2type = {};
 const toString = class2type.toString;
 const hasOwn = class2type.hasOwnProperty;
-function sayHello() {
-    var good = "world"
-    return `hello${good}!`;
-}
+let support = {};
+let deletedIds = [];
+let concat = deletedIds.concat;
+// Populate the class2type map
+each("Boolean Number String Function Array Date RegExp Object Error Symbol".split(" "),
+    function(name) {
+        class2type["[object " + name + "]"] = name.toLowerCase();
+    });
 
-function each() {
+function isArrayLike(obj) {
 
-}
+    // Support: iOS 8.2 (not reproducible in simulator)
+    // `in` check used to prevent JIT error (gh-2145)
+    // hasOwn isn't used here due to false negatives
+    // regarding Nodelist length in IE
+    var length = !!obj && "length" in obj && obj.length,
+        _type = type(obj);
 
-function map() {
-
-}
-
-function extend() {
-    var options, name, src, copy, copyIsArray, clone,
-        target = arguments[0] || {},
-        i = 1,
-        length = arguments.length,
-        deep = false;
-
-    // Handle a deep copy situation
-    if (typeof target === "boolean") {
-        deep = target;
-
-        // Skip the boolean and the target
-        target = arguments[i] || {};
-        i++;
+    if (_type === "function" || isWindow(obj)) {
+        return false;
     }
 
-    // Handle case when target is a string or something (possible in deep copy)
-    if (typeof target !== "object" && !isFunction(target)) {
-        target = {};
-    }
+    return _type === "array" || length === 0 ||
+        typeof length === "number" && length > 0 && (length - 1) in obj;
+}
 
-    // Extend jQuery itself if only one argument is passed
-    if (i === length) {
-        target = this;
-        i--;
-    }
+// console.log(isArrayLike({}),
+//     isArrayLike([]))
 
-    for (; i < length; i++) {
-
-        // Only deal with non-null/undefined values
-        if ((options = arguments[i]) != null) {
-
-            // Extend the base object
-            for (name in options) {
-                src = target[name];
-                copy = options[name];
-
-                // Prevent never-ending loop
-                if (target === copy) {
-                    continue;
-                }
-
-                // Recurse if we're merging plain objects or arrays
-                if (deep && copy && (isPlainObject(copy) ||
-                        (copyIsArray = isArray(copy)))) {
-
-                    if (copyIsArray) {
-                        copyIsArray = false;
-                        clone = src && isArray(src) ? src : [];
-
-                    } else {
-                        clone = src && isPlainObject(src) ? src : {};
-                    }
-
-                    // Never move original objects, clone them
-                    target[name] = extend(deep, clone, copy);
-
-                    // Don't bring in undefined values
-                } else if (copy !== undefined) {
-                    target[name] = copy;
-                }
+function each(obj, callback) {
+    var length, i = 0;
+    if (isArrayLike(obj)) {
+        length = obj.length;
+        for (; i < length; i++) {
+            if (callback.call(obj[i], obj[i], i) === false) {
+                break;
+            }
+        }
+    } else {
+        for (i in obj) {
+            if (callback.call(obj[i], obj[i], i) === false) {
+                break;
             }
         }
     }
-
-    // Return the modified object
-    return target;
+    return obj;
 }
 
-function template() {
+function map(elems, callback, arg) {
+    var length, value,
+        i = 0,
+        ret = [];
 
+    // Go through the array, translating each of the items to their new values
+    if (isArrayLike(elems)) {
+        length = elems.length;
+        for (; i < length; i++) {
+            value = callback(elems[i], i, arg);
+
+            if (value != null) {
+                ret.push(value);
+            }
+        }
+
+        // Go through every key on the object,
+    } else {
+        for (i in elems) {
+            value = callback(elems[i], i, arg);
+
+            if (value != null) {
+                ret.push(value);
+            }
+        }
+    }
+    // Flatten any nested arrays
+    return concat.apply([], ret);
 }
 
-function throttle() {
+var extend = require("extend");
 
+function generateNS(k, obj, context) {
+    var e = k.split("."),
+        f = context || window,
+        g = null;
+    while (g = e.shift()) {
+        if (e.length) {
+            f[g] === undefined && (f[g] = {});
+            f = f[g]
+        } else if (f[g] === undefined) {
+            f[g] = obj;
+        } else {
+            throw "[" + k + "] : has been register";
+        }
+    }
 }
 
-function bounce() {
+function queryNS(expression, context) {
+    //这里这样写的原因是为了躲开编译器的追捕
+    //同时这里使用必须多家注意小心谨慎，因为expression是可以是任何javascript脚本的
+    try {
+        return eval(`
+        with(context) {
+            eval(expression)||""
+        }
+        `)
+    } catch (e) {
+        return ""
+    }
+}
 
+function _template(str, data, regexp) {
+    return str.replace(regexp || /\${([^{}]*)}/g, function(str, p1) {
+        return queryNS(p1, data);
+    });
+}
+
+function template(str, data, regexp) {
+    return str.replace(regexp || /\${([^{}]*)}/g, function(str, p1) {
+        return (data[p1] !== undefined && data[p1] !== null && data[p1].toString()) || "";
+    });
 }
 
 function type(obj) {
@@ -109,80 +136,73 @@ function type(obj) {
 function isWindow(obj) {
     return obj != null && obj == obj.window;
 }
+// console.log(type(""),
+//     type({}),
+//     type(2), type(new Date), type(null))
 
 function isPlainObject(obj) {
-    var key;
-
-    // Must be an Object.
-    // Because of IE, we also have to check the presence of the constructor property.
-    // Make sure that DOM nodes and window objects don't pass through, as well
+    // console.log(isPlainObject(function() {}))
+    // console.log(isPlainObject({}))
+    // console.log(isPlainObject(window))
+    // console.log(isPlainObject(document.createElement("div")))
+    // console.log(isPlainObject([]))
+    // var b = function() {}
+    // var a = new b();
+    // console.log(isPlainObject(a))
     if (!obj || type(obj) !== "object" || obj.nodeType || isWindow(obj)) {
         return false;
     }
 
-    try {
+    var ctor, prot;
 
-        // Not own constructor property must be Object
-        if (obj.constructor &&
-            !hasOwn.call(obj, "constructor") &&
-            !hasOwn.call(obj.constructor.prototype, "isPrototypeOf")) {
-            return false;
-        }
-    } catch (e) {
+    // If has modified constructor
+    ctor = obj.constructor;
+    if (typeof ctor !== 'function') return false;
 
-        // IE8,9 Will throw exceptions on certain host objects #9897
+    // If has modified prototype
+    prot = ctor.prototype;
+    if (type(prot) === false) return false;
+
+    // If constructor does not have an Object-specific method
+    if (prot.hasOwnProperty('isPrototypeOf') === false) {
         return false;
     }
 
-    // Support: IE<9
-    // Handle iteration over inherited properties before own properties.
-    if (!support.ownFirst) {
-        for (key in obj) {
-            return hasOwn.call(obj, key);
-        }
-    }
-
-    // Own properties are enumerated firstly, so to speed up,
-    // if last one is own, then all properties are own.
-    for (key in obj) {}
-
-    return key === undefined || hasOwn.call(obj, key);
+    // Most likely a plain Object
+    return true;
 }
 
 function isFunction(obj) {
     return type(obj) === "function";
 }
 
-function isNumber() {
+function isNumeric(obj) {
     var realStringObj = obj && obj.toString();
     return !isArray(obj) && (realStringObj - parseFloat(realStringObj) + 1) >= 0;
 
 }
 
-function isArray() {
+function isArray(obj) {
     return type(obj) === "array";
 }
 
-function isString() {
-
-}
-
-function querySelectorAll() {
-
-}
 
 function getUuid() {
-    return uuid.v1();
+    return uuid.generate();
 }
+
+let td=require("../lib/throttledebounce.es6");
 module.exports = {
     each,
     map,
     extend,
-    template,
-    throttle,
-    bounce,
     isFunction,
-    isNumber,
-    isString,
-    getUuid
+    isPlainObject,
+    isNumeric,
+    getUuid,
+    generateNS,
+    _template,
+    template,
+    debounce:td.debounce,
+    throttle:td.throttle
 }
