@@ -18,7 +18,9 @@ export function script() {
       entries: './main.es6',
       debug: true
     })
-    .transform(babelify);
+    .transform(babelify,{
+      compact: "auto"
+    });
   return b.bundle()
     // .on('error', function(err) {
     //   gutil.log(
