@@ -11,11 +11,22 @@
             font-size: 12px;
         }
     </style>
-    <script src="http://resource.a0bi.com/resource/js/lib/json2.js"></script>
+    <script src="./json2.js"></script>
     <script>
         (function() {
+            window.btst_config={//外部全局生命周期方法配置
+                ready:function(){
+                    console.log("hello gready");
+                },
+                unload:function(){
+                    console.log("hello gunload");
+                },
+                beforeUnload:function(){
+                    console.log("hello gbefore unload");
+                }
+            };
             var btst = document.createElement("script");
-            btst.src = "../main.js?" + ~(new Date() / 36e5);
+            btst.src = "../main.js?" + ~(new Date() / 36e5);//一小时更新一次js缓存
             var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(btst, s);
         })();
