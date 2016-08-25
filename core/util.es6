@@ -191,7 +191,24 @@ function getUuid() {
     return uuid.generate();
 }
 
-let td=require("../lib/throttledebounce.es6");
+function toISODateString(date) {
+    function pad(number) {
+        if (number < 10) {
+            return '0' + number;
+        }
+        return number;
+    }
+
+    return date.getUTCFullYear() +
+        '-' + pad(date.getUTCMonth() + 1) +
+        '-' + pad(date.getUTCDate()) +
+        'T' + pad(date.getUTCHours()) +
+        ':' + pad(date.getUTCMinutes()) +
+        ':' + pad(date.getUTCSeconds()) +
+        '.' + (date.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+        'Z';
+}
+let td = require("../lib/throttledebounce.es6");
 module.exports = {
     each,
     map,
@@ -203,6 +220,7 @@ module.exports = {
     generateNS,
     _template,
     template,
-    debounce:td.debounce,
-    throttle:td.throttle
+    debounce: td.debounce,
+    throttle: td.throttle,
+    toISODateString
 }
