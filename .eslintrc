@@ -15,5 +15,4 @@
         "no-cond-assign": "warn",
         "no-unused-vars": "warn"
     }
-    // "extends": "eslint:recommended"
 }

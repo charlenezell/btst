@@ -5,20 +5,25 @@ var {
     cookie
 } = require("./tools.es6");
 var config = require("../config.es6");
+var Plugin=require("./Plugin.es6");
 // var event = require("./event.es6");
 // var $ = require("./selector.es6");
 
 function register(config) {
     // console.log(config);
     ready(function() { //when domcontentReady run life circle method ready of plugins
-        util.each(config.plugins, (plugin, k) => {
-            plugin.ready && plugin.ready();
+        util.each(config.plugins, (plugin) => {
+            if(plugin.canRun&&plugin.canRun({url:location.href,phase:Plugin.phase.Ready})){
+                plugin.ready && plugin.ready();
+            }
         });
         window.btst_config.ready && window.btst_config.ready();
     });
     domEvent.addEvent(window, "unload", function() {
         util.each(config.plugins, (plugin) => {
-            plugin.unload && plugin.unload();
+            if(plugin.canRun&&plugin.canRun({url:location.href,phase:Plugin.phase.Unload})){
+                plugin.unload && plugin.unload();
+            }
         });
         window.btst_config.unload && window.btst_config.unload();
     });
@@ -29,9 +34,11 @@ function register(config) {
     //     window.btst_config.beforeUnload && window.btst_config.beforeUnload();
     //     return void(0);
     // }
-    domEvent.addEvent(window, "beforeunload", function(event) {
+    domEvent.addEvent(window, "beforeunload", function() {
         util.each(config.plugins, (plugin) => {
-            plugin.beforeUnload && plugin.beforeUnload();
+            if(plugin.canRun&&plugin.canRun({url:location.href,phase:Plugin.phase.BeforeUnload})){
+                plugin.beforeUnload && plugin.beforeUnload();
+            }
         });
         window.btst_config.beforeUnload && window.btst_config.beforeUnload();
         // event.preventDefault();
@@ -44,13 +51,20 @@ function register(config) {
 
 function sendInfomation(data) {
     // document.getElementById("hehe").innerHTML = JSON.stringify(data, null, "\t")
-        alert(JSON.stringify(data, null, "\t"));
+        console.log(JSON.stringify(data, null, "\t"));
 }
-
+function getUuidCreateTime(){
+    return cookie("btst_uuidctime");
+}
 function getUuid() {
     var t = cookie("btst_uuid");
     if (!t) {
         t = util.getUuid();
+        cookie("btst_uuidctime",(new Date()-0),{
+            expires: config.uuidcookieExpireDay * 24,
+            domain: config.domain,
+            path: config.path
+        })
     }
     //每次都会更新一下那个cookie的expirestime
     cookie("btst_uuid", t, {
@@ -63,7 +77,8 @@ function getUuid() {
 let st = {
     register,
     sendInfomation,
-    getUuid
+    getUuid,
+    getUuidCreateTime
 };
 
 module.exports = st;

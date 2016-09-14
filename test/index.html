@@ -17,13 +17,13 @@
         (function() {
             window.btst_config={//外部全局生命周期方法配置
                 ready:function(){
-                    alert("hello gready");
+                    console.log("hello gready");
                 },
                 unload:function(){
-                    alert("hello gunload");
+                    console.log("hello gunload");
                 },
                 beforeUnload:function(){
-                    alert("hello gbefore unload");
+                    console.log("hello gbefore unload");
                 }
             };
             var btst = document.createElement("script");
