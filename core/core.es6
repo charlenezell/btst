@@ -48,10 +48,21 @@ function register(config) {
         return void(0);
     });
 }
-
+function parseParams(data){
+    let g=[];
+    util.each(data,function(v,k){
+        g.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    });
+    return g.join("&");
+}
 function sendInfomation(data) {
     // document.getElementById("hehe").innerHTML = JSON.stringify(data, null, "\t")
-        console.log(JSON.stringify(data, null, "\t"));
+    window.____btstc=window.____btstc||{};
+    var _key=(new Date()-0);
+    window.____btstc[_key]=new Image()
+    window.____btstc[_key].src="http://datacollection.100bt.com/httpDatacollection?"+parseParams(data);
+
+        // console.log(JSON.stringify(data, null, "\t"));
 }
 function getUuidCreateTime(){
     return cookie("btst_uuidctime");

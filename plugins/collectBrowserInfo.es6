@@ -3,7 +3,7 @@
 //这里使用的是百度fex的uadevice删减版原版应该是后端使用的，有一个全集的罗列，那部分代码已经注释掉了,注意这里的ua-device是删减版的
 // var uaInfo = new UA(navigator.userAgent);
 var {cookie}=require("../core/tools.es6");
-// let util = require("../core/util.es6");
+let util = require("../core/util.es6");
 let config=require("../config.es6");
 let core = require("../core/core.es6");
 var now=new Date();
@@ -30,20 +30,20 @@ var isNewVistor=true;
 if(uuidCreateTime&&(now-uuidCreateTime)>=1000*60*60*24){
     isNewVistor=false;
 }
-// function getFrontSessionId(){
-//     //和btuuid存在不一致的地方就是btuuid是每次都会续期，这个是不会续期除非超时30天
-//     var f_session=cookie("btst_f_sessionstr");
-//     if(!f_session){//不存在
-//         // console.log(1,f_session);
-//         f_session=util.getUuid();
-//         cookie("btst_f_sessionstr",f_session,{
-//             exports:30*24,
-//             domain:config.domain,
-//             path:config.path
-//         });
-//     }
-//     return f_session
-// }
+function getFrontSessionId(){
+    //和btuuid存在不一致的地方就是btuuid是每次都会续期，这个是不会续期除非超时30分钟
+    var f_session=cookie("btst_f_sessionstr");
+    if(!f_session){//不存在
+        // console.log(1,f_session);
+        f_session=util.getUuid();
+    }
+    cookie("btst_f_sessionstr",f_session,{
+        expires:0.5,
+        domain:config.domain,
+        path:config.path
+    });
+    return f_session
+}
 
 function CollectBrowserInfo(coreAPI) {
     this.core = coreAPI;
@@ -56,7 +56,7 @@ CollectBrowserInfo.prototype.beforeUnload=function(){
 
 }
 CollectBrowserInfo.prototype.unload=function(){
-    this.core.sendInfomation("sendUnload");
+    this.core.sendInfomation({});
 
 }
 CollectBrowserInfo.prototype.canRun=function(data){
@@ -83,7 +83,7 @@ CollectBrowserInfo.prototype.collectBrowserInfo = function() {
         // accessUTCHour:time.hour,//header自取
         // url:location.href,//header自取
         refer :document.referrer,
-        // f_sessionid:getFrontSessionId(),//header自取
+        sessionid:getFrontSessionId(),//后端服务器多机器切换说是不准前端自己做一下,距离上一次访问大于30分钟则重新生成否则不断update同一个sessionid的lastmodified时间
         COOKIE_ID :uuid,
         // language: navigator.language,//header自取
         screenWidth: screen.width,
@@ -92,7 +92,7 @@ CollectBrowserInfo.prototype.collectBrowserInfo = function() {
         aScreenHeight: screen.availHeight,
         // userAgent: navigator.userAgent,//header自取
         is_new:isNewVistor?"1":"0",//是否是新访客 is_new STRING 20 如果CookieID是新生成的（不论是否登录，是否购物过），则定义为新访客，时间为1个自然天。第二天就不是新访客了。 1-是，0-否。
-        user_id :feDuoduoId1000d||"-",// Cookie中的user_id vipruid BIGINT 20 Cookie中的user_id, 有效期1000天，退出仍然会有。如cookie中没有user_id，则填-。
+        duoduoId :feDuoduoId1000d||"-",// Cookie中的user_id vipruid BIGINT 20 Cookie中的user_id, 有效期1000天，退出仍然会有。如cookie中没有user_id，则填-。
     }
 }
 function createBrowserInfoPlugin(option) {
