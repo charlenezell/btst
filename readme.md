@@ -32,6 +32,7 @@
 1. 生命周期与模块api方法的一一对应
 
     ![生命周期方法](./resource/2016-09-21_181922.png)
+
     这几个方法分别对应页面domready,beforeunload,unload
 
 1. 能否运行的判断，canRun方法
