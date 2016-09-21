@@ -27,6 +27,15 @@
 
 1.使用gulp@4.x+browserify构建出根目录下的main.js供外部使用
 
+```shell
+    #启动构建
+    npm run start
+```
+
+```shell
+    #启动临时服务器
+    npm run server
+```
 ## 扩展
 
 1. 生命周期与模块api方法的一一对应
