@@ -56,7 +56,7 @@ CollectBrowserInfo.prototype.beforeUnload=function(){
 
 }
 CollectBrowserInfo.prototype.unload=function(){
-    this.core.sendInfomation({});
+    // this.core.sendInfomation({});
 
 }
 CollectBrowserInfo.prototype.canRun=function(data){

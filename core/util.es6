@@ -222,5 +222,6 @@ module.exports = {
     template,
     debounce: td.debounce,
     throttle: td.throttle,
-    toISODateString
+    toISODateString,
+    request:require("reqwest")
 }
