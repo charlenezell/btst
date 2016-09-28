@@ -12,16 +12,6 @@ core.register({
     plugins:[p_collectBrowserInfo()]//默认开启基本的浏览器信息收集模块
 });
 
-util.request({
-    url:'http://service.100bt.com/wx/signIn/prizeList.jsonp',
-    method:'get',
-    data:{
-        gameType:2
-    },
-    type:'jsonp'
-}).then(function(data){
-    alert(data.list.length);
-});
 
 //p_collectBrowserInfo()返回的是一个plugin对象
 // Class Plugin{

@@ -17,6 +17,7 @@ function register(config) {
                 plugin.ready && plugin.ready();
             }
         });
+        window.btst_config=window.btst_config||{};
         window.btst_config.ready && window.btst_config.ready();
     });
     domEvent.addEvent(window, "unload", function() {
@@ -25,6 +26,7 @@ function register(config) {
                 plugin.unload && plugin.unload();
             }
         });
+        window.btst_config=window.btst_config||{};
         window.btst_config.unload && window.btst_config.unload();
     });
     // window.onbeforeunload=function(){
@@ -40,6 +42,7 @@ function register(config) {
                 plugin.beforeUnload && plugin.beforeUnload();
             }
         });
+        window.btst_config=window.btst_config||{};
         window.btst_config.beforeUnload && window.btst_config.beforeUnload();
         // event.preventDefault();
         // event.returnValue = void(0);
@@ -60,7 +63,7 @@ function sendInfomation(data) {
     window.____btstc=window.____btstc||{};
     var _key=(new Date()-0);
     window.____btstc[_key]=new Image()
-    window.____btstc[_key].src="http://datacollection.100bt.com/httpDatacollection?"+parseParams(data);
+    window.____btstc[_key].src="http://dc.100bt.com/bd?"+parseParams(data);
 
         // console.log(JSON.stringify(data, null, "\t"));
 }
@@ -72,14 +75,14 @@ function getUuid() {
     if (!t) {
         t = util.getUuid();
         cookie("btst_uuidctime",(new Date()-0),{
-            expires: config.uuidcookieExpireDay * 24,
+            expires: config.uuidcookieExpireDay * 24*60,
             domain: config.domain,
             path: config.path
         })
     }
     //每次都会更新一下那个cookie的expirestime
     cookie("btst_uuid", t, {
-        expires: config.uuidcookieExpireDay * 24,
+        expires: config.uuidcookieExpireDay * 24*60,
         domain: config.domain,
         path: config.path
     });

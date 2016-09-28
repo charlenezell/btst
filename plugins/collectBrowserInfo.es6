@@ -18,7 +18,7 @@ var backendDuoduoId=cookie("BT_duoduoId");
 if(!feDuoduoId1000d){
     if(backendDuoduoId){
         cookie("btst_duoduoId1000d",backendDuoduoId,{
-            expires: 1000 * 24,//1000天的超时
+            expires: 1000 * 24*60,//1000天的超时
             domain: config.domain,
             path: config.path
         })
@@ -38,7 +38,7 @@ function getFrontSessionId(){
         f_session=util.getUuid();
     }
     cookie("btst_f_sessionstr",f_session,{
-        expires:0.5,
+        expires:30,
         domain:config.domain,
         path:config.path
     });
@@ -52,7 +52,7 @@ function CollectBrowserInfo(coreAPI) {
 CollectBrowserInfo.prototype.beforeUnload=function(){
     // 停留时间统计
     var lastingSecend=(new Date()-now)/1000;
-    this.core.sendInfomation({page_on_time :lastingSecend});
+    this.core.sendInfomation({page_on_time :lastingSecend});//如果需要可以在发的时候加上这次会话的id让后端可以合并各个生命周期
 
 }
 CollectBrowserInfo.prototype.unload=function(){
@@ -63,7 +63,7 @@ CollectBrowserInfo.prototype.canRun=function(data){
     return true;//任何情形都跑
 }
 CollectBrowserInfo.prototype.ready = function() {
-    this.core.sendInfomation(this.collectBrowserInfo());
+    this.core.sendInfomation(this.collectBrowserInfo());//如果需要可以在发的时候加上这次会话的id让后端可以合并各个生命周期
 }
 CollectBrowserInfo.prototype.collectBrowserInfo = function() {
     return {
@@ -86,10 +86,10 @@ CollectBrowserInfo.prototype.collectBrowserInfo = function() {
         sessionid:getFrontSessionId(),//后端服务器多机器切换说是不准前端自己做一下,距离上一次访问大于30分钟则重新生成否则不断update同一个sessionid的lastmodified时间
         COOKIE_ID :uuid,
         // language: navigator.language,//header自取
-        screenWidth: screen.width,
-        screenHeight: screen.height,
-        aScreenWidth: screen.availWidth,
-        aScreenHeight: screen.availHeight,
+        // screenWidth: screen.width,//这几个需求后来删了
+        // screenHeight: screen.height,
+        // aScreenWidth: screen.availWidth,
+        // aScreenHeight: screen.availHeight,
         // userAgent: navigator.userAgent,//header自取
         is_new:isNewVistor?"1":"0",//是否是新访客 is_new STRING 20 如果CookieID是新生成的（不论是否登录，是否购物过），则定义为新访客，时间为1个自然天。第二天就不是新访客了。 1-是，0-否。
         duoduoId :feDuoduoId1000d||"-",// Cookie中的user_id vipruid BIGINT 20 Cookie中的user_id, 有效期1000天，退出仍然会有。如cookie中没有user_id，则填-。

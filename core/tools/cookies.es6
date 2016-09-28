@@ -6,9 +6,9 @@ function cookie(key, value, options) {
       options.expires = -1;
     }
     if (typeof options.expires === 'number') {
-      var hours = options.expires,
+      var minute = options.expires,
         t = options.expires = new Date();
-      t.setHours(t.getHours() + hours);
+      t.setMinutes(t.getMinutes() + minute);
     }
     value = String(value);
     return (document.cookie = [encodeURIComponent(key), '=', options.raw ? value : encodeURIComponent(value), options.expires ? '; expires=' + options.expires.toUTCString() : '', options.path ? '; path=' + options.path : '', options.domain ? '; domain=' + options.domain : '', options.secure ? '; secure' : ''].join(''));
