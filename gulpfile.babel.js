@@ -10,14 +10,16 @@ import browserify from "browserify";
 import source from "vinyl-source-stream";
 import buffer from "vinyl-buffer";
 import babelify from "babelify";
+import deumdify from 'deumdify';
 // import livereload from "gulp-livereload";
 
 export function script() {
   var b = browserify({
       standalone: "btst",
       entries: './main.es6',
-      debug: true
+      debug: false
     })
+    .plugin(deumdify)
     .transform(babelify,{
       compact: "true"
     });
