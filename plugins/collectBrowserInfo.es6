@@ -56,9 +56,8 @@ CollectBrowserInfo.prototype.beforeUnload=function(){
         sessionid:getFrontSessionId(),//后端服务器多机器切换说是不准前端自己做一下,距离上一次访问大于30分钟则重新生成否则不断update同一个sessionid的lastmodified时间
         COOKIE_ID :uuid,
         page_on_time :lastingSecend,
-        duoduoId :feDuoduoId1000d||"-",// Cookie中的user_id vipruid BIGINT 20 Cookie中的user_id, 有效期1000天，退
+        duoduoId :feDuoduoId1000d||"-"// Cookie中的user_id vipruid BIGINT 20 Cookie中的user_id, 有效期1000天，退
     });//如果需要可以在发的时候加上这次会话的id让后端可以合并各个生命周期
-
 }
 CollectBrowserInfo.prototype.unload=function(){
     // this.core.sendInfomation({});
