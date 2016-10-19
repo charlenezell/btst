@@ -18,7 +18,7 @@ function register(config) {
             }
         });
         window.btst_config=window.btst_config||{};
-        window.btst_config.ready && window.btst_config.ready();
+        window.btst_config.ready && window.btst_config.ready(st);
     });
     domEvent.addEvent(window, "unload", function() {
         util.each(config.plugins, (plugin) => {
@@ -27,7 +27,7 @@ function register(config) {
             }
         });
         window.btst_config=window.btst_config||{};
-        window.btst_config.unload && window.btst_config.unload();
+        window.btst_config.unload && window.btst_config.unload(st);
     });
     // window.onbeforeunload=function(){
     //         util.each(config.plugins, (plugin) => {
@@ -43,7 +43,7 @@ function register(config) {
             }
         });
         window.btst_config=window.btst_config||{};
-        window.btst_config.beforeUnload && window.btst_config.beforeUnload();
+        window.btst_config.beforeUnload && window.btst_config.beforeUnload(st);
         // event.preventDefault();
         // event.returnValue = void(0);
         // event.returnValue = "我在这写点东西...";
