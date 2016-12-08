@@ -19,7 +19,7 @@ if(!feDuoduoId1000d){
     if(backendDuoduoId){
         cookie("btst_duoduoId1000d",backendDuoduoId,{
             expires: 1000 * 24*60,//1000天的超时
-            domain: config.domain,
+            domain: config.getDomain(),
             path: config.path
         })
     }
@@ -39,7 +39,7 @@ function getFrontSessionId(){
     }
     cookie("btst_f_sessionstr",f_session,{
         expires:30,
-        domain:config.domain,
+        domain:config.getDomain(),
         path:config.path
     });
     return f_session

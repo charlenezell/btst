@@ -76,14 +76,14 @@ function getUuid() {
         t = util.getUuid();
         cookie("btst_uuidctime",(new Date()-0),{
             expires: config.uuidcookieExpireDay * 24*60,
-            domain: config.domain,
+            domain: config.getDomain(),
             path: config.path
         })
     }
     //每次都会更新一下那个cookie的expirestime
     cookie("btst_uuid", t, {
         expires: config.uuidcookieExpireDay * 24*60,
-        domain: config.domain,
+        domain: config.getDomain(),
         path: config.path
     });
     return cookie("btst_uuid");
