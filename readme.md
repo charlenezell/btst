@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/charlenezell/btst.svg?branch=master)](https://travis-ci.org/charlenezell/btst)
+
 # 读我
 
 <!-- TOC -->
