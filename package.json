@@ -4,7 +4,7 @@
   "description": "pja statistic jssdk",
   "main": "main.js",
   "scripts": {
-    "test": "gulp",
+    "test": "gulp script",
     "start": "gulp",
     "server": "lite-server"
   },
