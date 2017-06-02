@@ -1,7 +1,7 @@
 language: node_js
-cache: 
+cache:
   directories:
-  - node_modules # NPM packages
+    - "node_modules"
 # test on two node.js versions: 0.6 and 0.8
 node_js:
   - 8.0.0
